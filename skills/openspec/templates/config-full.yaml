@@ -1,0 +1,26 @@
+schema: spec-driven
+
+context: |
+  Tech stack: TypeScript, React 19, Node.js 22, PostgreSQL
+  API style: RESTful, JSON responses, documented in docs/api.md
+  Testing: Vitest for unit tests, Playwright for e2e
+  Style: ESLint with Prettier, strict TypeScript
+  Language: Russian — все артефакты генерировать на русском языке,
+    технические термины (API, REST, GraphQL) оставлять на английском
+
+rules:
+  proposal:
+    - Включать план отката (rollback plan)
+    - Определять затронутые компоненты системы
+    - Указывать scope и out-of-scope
+  specs:
+    - Использовать формат Given/When/Then для сценариев
+    - Ссылаться на существующие паттерны перед созданием новых
+    - RFC 2119 ключевые слова (MUST, SHALL, SHOULD, MAY)
+  design:
+    - Включать обоснование выбора подхода (Decision Records)
+    - Описывать data flow и затронутые файлы
+  tasks:
+    - Группировать по логическим фазам
+    - Каждая задача — завершаемая за одну сессию
+    - Иерархическая нумерация (1.1, 1.2, 2.1)

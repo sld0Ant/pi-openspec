@@ -1,0 +1,11 @@
+{
+  "name": "pi-openspec",
+  "version": "1.0.0",
+  "description": "OpenSpec (spec-driven development) skill and prompt templates for Pi",
+  "keywords": ["pi-package"],
+  "license": "MIT",
+  "pi": {
+    "skills": ["skills"],
+    "prompts": ["prompts"]
+  }
+}

@@ -1,20 +1,20 @@
-# Быстрый старт: от установки до первого изменения
+# Quick start: from installation to first change
 
-## 1. Установка OpenSpec
+## 1. Install OpenSpec
 
 ```bash
 bun add -g @fission-ai/openspec@latest
 openspec --version
 ```
 
-## 2. Инициализация в проекте
+## 2. Initialize in a project
 
 ```bash
 cd your-project
 openspec init --tools pi
 ```
 
-Будет создана структура:
+This creates:
 
 ```
 openspec/
@@ -27,9 +27,9 @@ openspec/
 └── prompts/opsx-*.md
 ```
 
-## 3. (Опционально) Настройка конфигурации
+## 3. (Optional) Configure
 
-Отредактируй `openspec/config.yaml`:
+Edit `openspec/config.yaml`:
 
 ```yaml
 schema: spec-driven
@@ -39,77 +39,77 @@ context: |
   Testing: Vitest
 ```
 
-## 4. Предложение изменения
+## 4. Propose a change
 
-В Pi введи:
+In Pi, type:
 
 ```
 /opsx:propose add-user-notifications
 ```
 
-OpenSpec создаст:
+OpenSpec creates:
 
 ```
 openspec/changes/add-user-notifications/
-├── proposal.md     # Зачем: уведомления нужны для…
-├── specs/           # Что: требования и сценарии
+├── proposal.md     # Why: notifications are needed for…
+├── specs/          # What: requirements and scenarios
 │   └── notifications/
 │       └── spec.md
-├── design.md        # Как: WebSocket vs polling, архитектура
-└── tasks.md         # Шаги: чеклист реализации
+├── design.md       # How: WebSocket vs polling, architecture
+└── tasks.md        # Steps: implementation checklist
 ```
 
-## 5. Просмотр и корректировка артефактов
+## 5. Review and adjust artifacts
 
-Прочитай сгенерированные файлы. Если нужно что-то поправить — отредактируй напрямую. Артефакты можно менять в любой момент.
+Read the generated files. If something needs tweaking — edit directly. Artifacts can be changed at any time.
 
 ```bash
 openspec show add-user-notifications
 openspec validate add-user-notifications
 ```
 
-## 6. Реализация
+## 6. Implement
 
 ```
 /opsx:apply
 ```
 
-Агент пройдёт по tasks.md, реализует каждую задачу и отметит выполненные `[x]`.
+The agent walks through tasks.md, implements each task, and marks completed ones `[x]`.
 
-## 7. Проверка статуса
+## 7. Check status
 
 ```bash
 openspec status --change add-user-notifications
 ```
 
-Показывает, какие артефакты готовы, какие заблокированы, сколько задач выполнено.
+Shows which artifacts are ready, which are blocked, how many tasks are done.
 
-## 8. Архивирование
+## 8. Archive
 
 ```
 /opsx:archive
 ```
 
-Что происходит:
-1. Дельта-спеки сливаются в `openspec/specs/`
-2. Папка изменения переносится в `openspec/changes/archive/2026-02-27-add-user-notifications/`
-3. Спецификации обновлены — источник правды отражает новое поведение
+What happens:
+1. Delta specs are merged into `openspec/specs/`
+2. The change directory moves to `openspec/changes/archive/2026-02-27-add-user-notifications/`
+3. Specifications are updated — the source of truth reflects the new behavior
 
-## 9. Следующее изменение
+## 9. Next change
 
-Цикл повторяется:
+The cycle repeats:
 
 ```
 /opsx:propose next-feature
 ```
 
-Каждое изменение строится на обновлённых спецификациях.
+Each change builds on the updated specifications.
 
-## Итого: минимальный workflow
+## Summary: minimal workflow
 
 ```
-openspec init --tools pi        # Один раз
-/opsx:propose <название>        # Создать изменение
-/opsx:apply                     # Реализовать
-/opsx:archive                   # Завершить
+openspec init --tools pi        # Once
+/opsx:propose <name>            # Create a change
+/opsx:apply                     # Implement
+/opsx:archive                   # Finish
 ```

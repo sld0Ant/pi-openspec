@@ -1,40 +1,40 @@
-# Пример: Разработка фичи с OpenSpec в Pi
+# Example: Feature development with OpenSpec in Pi
 
-Реальный сценарий — добавление системы уведомлений в существующий проект.
+A real scenario — adding a notification system to an existing project.
 
-## Контекст
+## Context
 
-Проект: веб-приложение на TypeScript + React + Node.js. Нужно добавить уведомления о событиях (новые сообщения, обновления статуса).
+Project: web app on TypeScript + React + Node.js. Need to add event notifications (new messages, status updates).
 
-## Шаг 1: Исследование
+## Step 1: Exploration
 
 ```
 /opsx:explore
 ```
 
-> Я хочу добавить уведомления. Какие варианты?
+> I want to add notifications. What are the options?
 
-Агент исследует кодовую базу, находит существующие паттерны (WebSocket-соединение уже есть для чата), предлагает варианты:
-1. Расширить существующий WebSocket
+The agent explores the codebase, finds existing patterns (WebSocket connection already exists for chat), suggests options:
+1. Extend existing WebSocket
 2. Server-Sent Events
 3. Polling
 
-Решаем расширить WebSocket — он уже есть.
+We decide to extend WebSocket — it's already there.
 
-## Шаг 2: Создание изменения
+## Step 2: Create a change
 
 ```
 /opsx:propose add-notifications
 ```
 
-Агент создаёт полный набор артефактов:
+The agent creates a full set of artifacts:
 
-**proposal.md** — Зачем:
-- Пользователи не видят новые события без обновления страницы
-- Scope: real-time уведомления через WebSocket, UI-компонент, persistence
-- Out of scope: email/push-уведомления (отдельное изменение)
+**proposal.md** — Why:
+- Users don't see new events without refreshing the page
+- Scope: real-time notifications via WebSocket, UI component, persistence
+- Out of scope: email/push notifications (separate change)
 
-**specs/notifications/spec.md** — Что:
+**specs/notifications/spec.md** — What:
 ```markdown
 ## ADDED Requirements
 
@@ -52,45 +52,45 @@ The system SHALL deliver notifications to connected users in real-time.
 - THEN unread notifications are loaded from the database
 ```
 
-**design.md** — Как:
-- Расширить WebSocket-хендлер новым типом событий
-- Новая таблица `notifications` в PostgreSQL
-- React-компонент NotificationBell в Header
+**design.md** — How:
+- Extend the WebSocket handler with a new event type
+- New `notifications` table in PostgreSQL
+- React NotificationBell component in Header
 
-**tasks.md** — Шаги:
+**tasks.md** — Steps:
 ```markdown
 ## 1. Backend
-- [ ] 1.1 Создать миграцию для таблицы notifications
-- [ ] 1.2 Добавить notification event type в WebSocket handler
+- [ ] 1.1 Create migration for notifications table
+- [ ] 1.2 Add notification event type to WebSocket handler
 - [ ] 1.3 API endpoint GET /notifications
 
 ## 2. Frontend
-- [ ] 2.1 NotificationBell компонент
-- [ ] 2.2 Подписка на WebSocket events
-- [ ] 2.3 Notification dropdown с историей
+- [ ] 2.1 NotificationBell component
+- [ ] 2.2 Subscribe to WebSocket events
+- [ ] 2.3 Notification dropdown with history
 ```
 
-## Шаг 3: Корректировка артефактов
+## Step 3: Adjust artifacts
 
-Читаем proposal и design. Замечаем, что не учли rate limiting для уведомлений. Редактируем design.md, добавляем задачу в tasks.md.
+Read proposal and design. Notice we didn't account for notification rate limiting. Edit design.md, add a task to tasks.md.
 
-Артефакты — живые документы, их можно менять в любой момент.
+Artifacts are living documents — they can be changed at any time.
 
-## Шаг 4: Реализация
+## Step 4: Implement
 
 ```
 /opsx:apply
 ```
 
-Агент проходит по tasks.md:
-- Создаёт миграцию
-- Расширяет WebSocket handler
-- Создаёт React-компоненты
-- Отмечает задачи `[x]`
+The agent walks through tasks.md:
+- Creates the migration
+- Extends the WebSocket handler
+- Creates React components
+- Marks tasks `[x]`
 
-Если в процессе обнаруживается проблема — обновляем design.md и продолжаем.
+If a problem is discovered during implementation — update design.md and continue.
 
-## Шаг 5: Проверка
+## Step 5: Verify
 
 ```bash
 openspec status --change add-notifications
@@ -102,24 +102,24 @@ Progress: 4/4 artifacts complete
 Tasks: 6/6 complete
 ```
 
-## Шаг 6: Архивирование
+## Step 6: Archive
 
 ```
 /opsx:archive
 ```
 
-- Дельта-спеки сливаются в `openspec/specs/notifications/spec.md`
-- Папка переносится в archive
-- Спецификации обновлены
+- Delta specs are merged into `openspec/specs/notifications/spec.md`
+- Directory moves to archive
+- Specifications are updated
 
-## Результат
+## Result
 
-После архивирования в проекте:
+After archiving:
 
 ```
-openspec/specs/notifications/spec.md    # Новый спек — источник правды
+openspec/specs/notifications/spec.md    # New spec — source of truth
 openspec/changes/archive/2026-02-27-add-notifications/
-                                         # Полная история: proposal, design, tasks
+                                         # Full history: proposal, design, tasks
 ```
 
-Следующее изменение (например, email-уведомления) может ссылаться на существующий спек `notifications/spec.md` и расширять его через дельту.
+The next change (e.g. email notifications) can reference the existing `notifications/spec.md` spec and extend it via a delta.

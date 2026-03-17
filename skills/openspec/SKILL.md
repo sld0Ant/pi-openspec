@@ -1,32 +1,32 @@
 ---
 name: openspec
-description: Установка, настройка и использование OpenSpec (spec-driven development) в Pi. Используй когда пользователь хочет работать с OpenSpec, планировать изменения через спецификации, или выполнять команды /opsx:propose, /opsx:apply, /opsx:archive.
+description: Setup, configure, and use OpenSpec (spec-driven development) in Pi. Use when the user wants to work with OpenSpec, plan changes through specifications, or run /opsx:propose, /opsx:apply, /opsx:archive commands.
 ---
 
-# OpenSpec для Pi
+# OpenSpec for Pi
 
-OpenSpec — фреймворк спецификационно-управляемой разработки (SDD). Позволяет согласовать требования до написания кода: человек и AI выравниваются на спецификациях, затем реализуют, затем архивируют.
+OpenSpec is a spec-driven development (SDD) framework. It aligns requirements before writing code: human and AI agree on specifications, then implement, then archive.
 
-## Требования
+## Requirements
 
 - **Node.js ≥ 20.19.0** (`node --version`)
-- **bun** (предпочтительно) или npm
-- **Платформы**: Linux, macOS, WSL
+- **bun** (preferred) or npm
+- **Platforms**: Linux, macOS, WSL
 
-## Установка
+## Installation
 
 ```bash
 bash scripts/install.sh
 ```
 
-(Запускай из директории скилла)
+(Run from the skill directory)
 
-Скрипт:
-1. Проверяет версию Node.js
-2. Устанавливает `@fission-ai/openspec` глобально
-3. Запускает `openspec init --tools pi` в текущем проекте
+The script:
+1. Checks Node.js version
+2. Installs `@fission-ai/openspec` globally
+3. Runs `openspec init --tools pi` in the current project
 
-### Ручная установка
+### Manual installation
 
 ```bash
 bun add -g @fission-ai/openspec@latest
@@ -34,86 +34,86 @@ cd your-project
 openspec init --tools pi
 ```
 
-## Как это работает
+## How it works
 
-После `openspec init --tools pi` в проекте появляются:
+After `openspec init --tools pi`, the project gets:
 
 ```
 openspec/
-├── specs/              # Источник правды: как система работает сейчас
-├── changes/            # Предлагаемые изменения (по папке на каждое)
-└── config.yaml         # Конфигурация проекта (опционально)
+├── specs/              # Source of truth: how the system works now
+├── changes/            # Proposed changes (one directory per change)
+└── config.yaml         # Project configuration (optional)
 
 .pi/
-├── skills/openspec-*/SKILL.md    # Автогенерированные скиллы OpenSpec
-└── prompts/opsx-*.md             # Автогенерированные prompt-шаблоны
+├── skills/openspec-*/SKILL.md    # Auto-generated OpenSpec skills
+└── prompts/opsx-*.md             # Auto-generated prompt templates
 ```
 
-OpenSpec сам генерирует скиллы и промпты для Pi. Данный скилл — **мета-руководство** по эффективному использованию.
+OpenSpec generates skills and prompts for Pi automatically. This skill is a **meta-guide** for effective usage.
 
-## Основные команды (core profile)
+## Core commands (core profile)
 
-> **Синтаксис:** В документации OpenSpec команды пишутся через двоеточие (`/opsx:propose`). В Pi prompt templates вызываются через дефис (`/opsx-propose`). Оба варианта эквивалентны — Pi распознаёт свой формат автоматически.
+> **Syntax:** OpenSpec docs use colon syntax (`/opsx:propose`). Pi prompt templates use hyphens (`/opsx-propose`). Both are equivalent — Pi recognizes its own format automatically.
 
-| Команда | Pi prompt | Назначение |
-|---------|-----------|------------|
-| `/opsx:propose <название>` | `/opsx-propose` | Создать изменение + все артефакты планирования |
-| `/opsx:explore` | `/opsx-explore` | Исследовать идею до фиксации в изменение |
-| `/opsx:apply` | `/opsx-apply` | Реализовать задачи из tasks.md |
-| `/opsx:archive` | `/opsx-archive` | Архивировать завершённое изменение, слить спеки |
+| Command | Pi prompt | Purpose |
+|---------|-----------|---------|
+| `/opsx:propose <name>` | `/opsx-propose` | Create a change + all planning artifacts |
+| `/opsx:explore` | `/opsx-explore` | Explore an idea before committing to a change |
+| `/opsx:apply` | `/opsx-apply` | Implement tasks from tasks.md |
+| `/opsx:archive` | `/opsx-archive` | Archive a completed change, merge specs |
 
-### Расширенные команды (expanded profile)
+### Expanded commands (expanded profile)
 
-Включить: `openspec config profile` → выбрать workflows → `openspec update`
+Enable: `openspec config profile` → select workflows → `openspec update`
 
-| Команда | Pi prompt | Назначение |
-|---------|-----------|------------|
-| `/opsx:new` | `/opsx-new` | Создать каркас изменения |
-| `/opsx:continue` | `/opsx-continue` | Создать следующий артефакт по зависимостям |
-| `/opsx:ff` | `/opsx-ff` | Создать все артефакты планирования за раз |
-| `/opsx:verify` | `/opsx-verify` | Проверить реализацию на соответствие артефактам |
-| `/opsx:sync` | `/opsx-sync` | Слить дельта-спеки в основные |
-| `/opsx:bulk-archive` | `/opsx-bulk-archive` | Архивировать несколько изменений |
-| `/opsx:onboard` | `/opsx-onboard` | Интерактивное обучение workflow |
+| Command | Pi prompt | Purpose |
+|---------|-----------|---------|
+| `/opsx:new` | `/opsx-new` | Create a change scaffold |
+| `/opsx:continue` | `/opsx-continue` | Create the next artifact by dependency order |
+| `/opsx:ff` | `/opsx-ff` | Create all planning artifacts at once |
+| `/opsx:verify` | `/opsx-verify` | Verify implementation against artifacts |
+| `/opsx:sync` | `/opsx-sync` | Merge delta specs into main specs |
+| `/opsx:bulk-archive` | `/opsx-bulk-archive` | Archive multiple changes |
+| `/opsx:onboard` | `/opsx-onboard` | Interactive workflow tutorial |
 
-## Быстрый старт
+## Quick start
 
 ```
-Ты: /opsx:propose add-dark-mode
-AI: Создал openspec/changes/add-dark-mode/
-    ✓ proposal.md — зачем и что меняем
-    ✓ specs/       — требования и сценарии
-    ✓ design.md    — технический подход
-    ✓ tasks.md     — чеклист реализации
+You: /opsx:propose add-dark-mode
+AI:  Created openspec/changes/add-dark-mode/
+     ✓ proposal.md  — why and what we're changing
+     ✓ specs/        — requirements and scenarios
+     ✓ design.md     — technical approach
+     ✓ tasks.md      — implementation checklist
 
-Ты: /opsx:apply
-AI: Реализую задачи...
-    ✓ 1.1 Создан ThemeContext
-    ✓ 1.2 Добавлены CSS-переменные
-    Все задачи выполнены!
+You: /opsx:apply
+AI:  Implementing tasks...
+     ✓ 1.1 Created ThemeContext
+     ✓ 1.2 Added CSS variables
+     All tasks complete!
 
-Ты: /opsx:archive
-AI: ✓ Спеки слиты в openspec/specs/
-    ✓ Изменение перенесено в archive/
+You: /opsx:archive
+AI:  ✓ Specs merged into openspec/specs/
+     ✓ Change moved to archive/
 ```
 
-## Конфигурация проекта
+## Project configuration
 
-Скопируй шаблон конфига в проект:
+Copy a config template into your project:
 
 ```bash
 cp templates/config-minimal.yaml your-project/openspec/config.yaml
 ```
 
-Или полный вариант с примерами:
+Or the full version with examples:
 
 ```bash
 cp templates/config-full.yaml your-project/openspec/config.yaml
 ```
 
-(Пути относительны от директории скилла)
+(Paths are relative to the skill directory)
 
-## Обновление после апгрейда
+## Updating after upgrade
 
 ```bash
 bun add -g @fission-ai/openspec@latest
@@ -123,42 +123,42 @@ openspec update
 
 ## Troubleshooting
 
-### Команды не распознаются
+### Commands not recognized
 
 ```bash
-openspec update    # Перегенерировать скиллы и промпты
+openspec update    # Regenerate skills and prompts
 ```
 
-Убедись, что `.pi/skills/` существует и содержит `openspec-*` файлы.
+Make sure `.pi/skills/` exists and contains `openspec-*` files.
 
 ### "Node.js version too old"
 
-OpenSpec требует Node.js ≥ 20.19.0. Обнови:
+OpenSpec requires Node.js ≥ 20.19.0. Upgrade:
 
 ```bash
 # nvm
 nvm install 20
 nvm use 20
 
-# Или напрямую с https://nodejs.org
+# Or directly from https://nodejs.org
 ```
 
-### Артефакты генерируются некорректно
+### Artifacts generated incorrectly
 
-- Добавь контекст проекта в `openspec/config.yaml`
-- Используй `/opsx:continue` вместо `/opsx:ff` для большего контроля
-- Добавь правила (`rules`) для конкретных артефактов
+- Add project context to `openspec/config.yaml`
+- Use `/opsx:continue` instead of `/opsx:ff` for more control
+- Add `rules` for specific artifacts
 
-### Изменение не найдено
+### Change not found
 
 ```bash
-openspec list              # Список активных изменений
-openspec show <название>   # Детали конкретного изменения
+openspec list              # List active changes
+openspec show <name>       # Details for a specific change
 ```
 
-## Reference-документы
+## References
 
-- [Шпаргалка](references/cheatsheet.md) — Ключевые команды и концепции
-- [Интеграция с Pi](references/pi-integration.md) — Как Pi и OpenSpec работают вместе
-- [Быстрый старт](examples/quick-start.md) — Пошаговое руководство
-- [Пример workflow в Pi](examples/pi-workflow.md) — Реальный сценарий разработки
+- [Cheatsheet](references/cheatsheet.md) — Key commands and concepts
+- [Pi integration](references/pi-integration.md) — How Pi and OpenSpec work together
+- [Quick start](examples/quick-start.md) — Step-by-step guide
+- [Pi workflow example](examples/pi-workflow.md) — Real development scenario

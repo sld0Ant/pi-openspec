@@ -13,8 +13,8 @@ error() { echo -e "${RED}[openspec]${NC} $*" >&2; }
 
 check_node() {
     if ! command -v node &>/dev/null; then
-        error "Node.js не найден. Установи версию >= ${MIN_NODE_MAJOR}.${MIN_NODE_MINOR}.0"
-        error "https://nodejs.org или: nvm install ${MIN_NODE_MAJOR}"
+        error "Node.js not found. Install version >= ${MIN_NODE_MAJOR}.${MIN_NODE_MINOR}.0"
+        error "https://nodejs.org or: nvm install ${MIN_NODE_MAJOR}"
         exit 1
     fi
 
@@ -25,8 +25,8 @@ check_node() {
     minor=$(echo "$version" | cut -d. -f2)
 
     if (( major < MIN_NODE_MAJOR )) || (( major == MIN_NODE_MAJOR && minor < MIN_NODE_MINOR )); then
-        error "Node.js $version — требуется >= ${MIN_NODE_MAJOR}.${MIN_NODE_MINOR}.0"
-        error "Обнови: nvm install ${MIN_NODE_MAJOR} && nvm use ${MIN_NODE_MAJOR}"
+        error "Node.js $version — required >= ${MIN_NODE_MAJOR}.${MIN_NODE_MINOR}.0"
+        error "Upgrade: nvm install ${MIN_NODE_MAJOR} && nvm use ${MIN_NODE_MAJOR}"
         exit 1
     fi
 
@@ -35,39 +35,39 @@ check_node() {
 
 install_openspec() {
     if command -v bun &>/dev/null; then
-        log "Установка через bun..."
+        log "Installing via bun..."
         bun add -g @fission-ai/openspec@latest
     elif command -v npm &>/dev/null; then
-        log "Установка через npm..."
+        log "Installing via npm..."
         npm install -g @fission-ai/openspec@latest
     else
-        error "Ни bun, ни npm не найдены. Установи один из них."
+        error "Neither bun nor npm found. Install one of them."
         exit 1
     fi
 
     if ! command -v openspec &>/dev/null; then
-        error "openspec не найден после установки. Проверь PATH."
+        error "openspec not found after installation. Check your PATH."
         exit 1
     fi
 
-    log "OpenSpec $(openspec --version) установлен ✓"
+    log "OpenSpec $(openspec --version) installed ✓"
 }
 
 init_project() {
     local target="${1:-.}"
 
     if [[ ! -d "$target" ]]; then
-        error "Директория $target не существует"
+        error "Directory $target does not exist"
         exit 1
     fi
 
-    log "Инициализация OpenSpec в $target..."
-    log "(openspec init может задать интерактивные вопросы о профиле и конфигурации)"
+    log "Initializing OpenSpec in $target..."
+    log "(openspec init may ask interactive questions about profile and configuration)"
     cd "$target"
     openspec init --tools pi
-    log "Проект инициализирован ✓"
+    log "Project initialized ✓"
     log ""
-    log "Сгенерированные файлы:"
+    log "Generated files:"
     find .pi/skills -name '*.md' -type f 2>/dev/null | while read -r f; do
         log "  $f"
     done
@@ -77,7 +77,7 @@ init_project() {
 }
 
 main() {
-    log "=== Установка OpenSpec для Pi ==="
+    log "=== OpenSpec Installation for Pi ==="
     log ""
 
     check_node
@@ -87,15 +87,15 @@ main() {
         init_project "${2:-.}"
     else
         log ""
-        log "Для инициализации в проекте:"
+        log "To initialize in a project:"
         log "  cd your-project && openspec init --tools pi"
         log ""
-        log "Или запусти этот скрипт с --init:"
+        log "Or run this script with --init:"
         log "  bash install.sh --init /path/to/project"
     fi
 
     log ""
-    log "Готово! Используй /opsx:propose для первого изменения."
+    log "Done! Use /opsx:propose for your first change."
 }
 
 main "$@"

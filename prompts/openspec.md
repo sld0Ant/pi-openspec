@@ -1,13 +1,13 @@
 ---
-description: Запустить OpenSpec команду (propose, apply, archive, explore и др.)
+description: Run an OpenSpec command (propose, apply, archive, explore, etc.)
 ---
-Выполни OpenSpec команду: $@
+Run the OpenSpec command: $@
 
-Если аргументы не указаны, предложи пользователю выбор:
-1. `/openspec propose <название>` — создать новое изменение
-2. `/openspec apply [название]` — реализовать задачи
-3. `/openspec archive [название]` — архивировать изменение
-4. `/openspec explore` — исследовать идею
-5. `/openspec status` — показать статус изменений
+If no arguments are provided, offer the user a choice:
+1. `/openspec propose <name>` — create a new change
+2. `/openspec apply [name]` — implement tasks
+3. `/openspec archive [name]` — archive a change
+4. `/openspec explore` — explore an idea
+5. `/openspec status` — show change status
 
-Загрузи скилл openspec для полных инструкций.
+Load the openspec skill for full instructions.

@@ -1,88 +1,88 @@
-# Шпаргалка OpenSpec
+# OpenSpec Cheatsheet
 
-## Структура каталогов
+## Directory structure
 
 ```
 openspec/
-├── specs/                  # Источник правды — текущее поведение системы
-│   └── <домен>/
+├── specs/                  # Source of truth — current system behavior
+│   └── <domain>/
 │       └── spec.md
-├── changes/                # Активные изменения
-│   ├── <название>/
-│   │   ├── proposal.md     # Зачем и что меняем
-│   │   ├── specs/          # Дельта-спеки (ADDED/MODIFIED/REMOVED)
-│   │   │   └── <домен>/
+├── changes/                # Active changes
+│   ├── <name>/
+│   │   ├── proposal.md     # Why and what we're changing
+│   │   ├── specs/          # Delta specs (ADDED/MODIFIED/REMOVED)
+│   │   │   └── <domain>/
 │   │   │       └── spec.md
-│   │   ├── design.md       # Технический подход
-│   │   └── tasks.md        # Чеклист реализации
-│   └── archive/            # Завершённые изменения
-└── config.yaml             # Конфигурация проекта
+│   │   ├── design.md       # Technical approach
+│   │   └── tasks.md        # Implementation checklist
+│   └── archive/            # Completed changes
+└── config.yaml             # Project configuration
 ```
 
-## OPSX-команды (слэш-команды в Pi)
+## OPSX commands (slash commands in Pi)
 
-### Core Profile (по умолчанию)
+### Core Profile (default)
 
 ```
-/opsx:propose <название>    Создать изменение + артефакты планирования
-/opsx:explore               Исследовать идею перед созданием изменения
-/opsx:apply [название]      Реализовать задачи из tasks.md
-/opsx:archive [название]    Архивировать изменение, слить спеки
+/opsx:propose <name>        Create a change + planning artifacts
+/opsx:explore               Explore an idea before committing to a change
+/opsx:apply [name]          Implement tasks from tasks.md
+/opsx:archive [name]        Archive a change, merge specs
 ```
 
 ### Expanded Profile
 
 ```
-/opsx:new <название>        Создать каркас изменения (без артефактов)
-/opsx:continue [название]   Создать следующий артефакт по зависимостям
-/opsx:ff [название]         Быстро создать все артефакты планирования
-/opsx:verify [название]     Проверить реализацию vs артефакты
-/opsx:sync [название]       Слить дельта-спеки в основные
-/opsx:bulk-archive          Архивировать несколько изменений
-/opsx:onboard               Интерактивное обучение
+/opsx:new <name>            Create a change scaffold (no artifacts)
+/opsx:continue [name]       Create the next artifact by dependency order
+/opsx:ff [name]             Fast-forward: create all planning artifacts at once
+/opsx:verify [name]         Verify implementation against artifacts
+/opsx:sync [name]           Merge delta specs into main specs
+/opsx:bulk-archive          Archive multiple changes
+/opsx:onboard               Interactive workflow tutorial
 ```
 
-## CLI-команды (терминал)
+## CLI commands (terminal)
 
-### Управление
+### Management
 
 ```bash
-openspec init [--tools pi]           Инициализация в проекте
-openspec update                      Обновить сгенерированные файлы
-openspec list [--specs|--changes]    Список спеков или изменений
-openspec show <название>             Детали изменения/спека
-openspec view                        Интерактивный дашборд
-openspec validate [--all]            Валидация спеков и изменений
-openspec archive <название>          Архивировать изменение
+openspec init [--tools pi]           Initialize in a project
+openspec update                      Regenerate generated files
+openspec list [--specs|--changes]    List specs or changes
+openspec show <name>                 Details for a change/spec
+openspec view                        Interactive dashboard
+openspec validate [--all]            Validate specs and changes
+openspec archive <name>              Archive a change
 ```
 
-### Схемы
+### Schemas
 
 ```bash
-openspec schemas                     Список доступных схем
-openspec schema init <имя>           Создать кастомную схему
-openspec schema fork <из> <в>        Форкнуть схему для кастомизации
-openspec schema validate <имя>       Валидировать схему
-openspec schema which <имя>          Откуда берётся схема
+openspec schemas                     List available schemas
+openspec schema init <name>          Create a custom schema
+openspec schema fork <from> <to>     Fork a schema for customization
+openspec schema validate <name>      Validate a schema
+openspec schema which <name>         Where a schema comes from
 ```
 
-### Workflow-команды
+### Workflow commands
 
 ```bash
-openspec status --change <имя>       Статус артефактов изменения
-openspec instructions <артефакт>     Инструкции для создания артефакта
-openspec templates                   Пути к шаблонам
+openspec status --change <name>      Artifact status for a change
+openspec instructions <artifact>     Instructions for creating an artifact
+openspec templates                   Template paths
 ```
 
-### Настройки
+### Settings
 
 ```bash
-openspec config list                 Все текущие настройки
-openspec config profile              Переключение workflow-профиля
-openspec config set <key> <value>    Установить параметр
+openspec config list                 All current settings
+openspec config profile              Switch workflow profile
+openspec config set <key> <value>    Set a parameter
 ```
 
-## Граф зависимостей артефактов (spec-driven)
+## Artifact dependency graph (spec-driven)
 
 ```
               proposal
@@ -99,14 +99,14 @@ openspec config set <key> <value>    Установить параметр
             implement
 ```
 
-- `proposal` — корень, не зависит ни от чего
-- `specs` и `design` — зависят от proposal, можно создавать параллельно
-- `tasks` — зависит от specs И design
-- Реализация (`apply`) — требует tasks
+- `proposal` — root, no dependencies
+- `specs` and `design` — depend on proposal, can be created in parallel
+- `tasks` — depends on both specs AND design
+- Implementation (`apply`) — requires tasks
 
-## Дельта-спеки
+## Delta specs
 
-Описывают изменения относительно текущих спецификаций:
+Describe changes relative to current specifications:
 
 ```markdown
 # Delta for Auth
@@ -133,61 +133,61 @@ The system SHALL expire sessions after 15 minutes.
 (Deprecated in favor of 2FA)
 ```
 
-При архивировании:
-- **ADDED** → добавляются в основной спек
-- **MODIFIED** → заменяют существующее требование
-- **REMOVED** → удаляются из основного спека
+On archive:
+- **ADDED** → merged into the main spec
+- **MODIFIED** → replaces the existing requirement
+- **REMOVED** → deleted from the main spec
 
-## RFC 2119 ключевые слова
+## RFC 2119 keywords
 
-| Слово | Сила |
-|-------|------|
-| **MUST / SHALL** | Обязательное требование |
-| **SHOULD** | Рекомендуемое, допустимы исключения |
-| **MAY** | Опциональное |
+| Keyword | Strength |
+|---------|----------|
+| **MUST / SHALL** | Mandatory requirement |
+| **SHOULD** | Recommended, exceptions allowed |
+| **MAY** | Optional |
 
-## Типичные workflow
+## Common workflows
 
-### Быстрая фича
+### Quick feature
 
 ```
 /opsx:propose → /opsx:apply → /opsx:archive
 ```
 
-### Исследование + фича (expanded)
+### Exploration + feature (expanded)
 
 ```
-/opsx:explore → /opsx:new → /opsx:continue (повторять) → /opsx:apply → /opsx:verify → /opsx:archive
+/opsx:explore → /opsx:new → /opsx:continue (repeat) → /opsx:apply → /opsx:verify → /opsx:archive
 ```
 
-### Параллельная работа
+### Parallel work
 
 ```
-/opsx:apply change-a    # Работаем над A
-                         # Переключение контекста
-/opsx:new change-b      # Создаём B
-/opsx:ff change-b       # Артефакты для B
-/opsx:apply change-b    # Реализуем B
-/opsx:archive change-b  # Завершаем B
-/opsx:apply change-a    # Возвращаемся к A
+/opsx:apply change-a    # Work on A
+                         # Context switch
+/opsx:new change-b      # Create B
+/opsx:ff change-b       # Artifacts for B
+/opsx:apply change-b    # Implement B
+/opsx:archive change-b  # Finish B
+/opsx:apply change-a    # Return to A
 ```
 
-## Когда обновлять изменение vs создать новое
+## When to update a change vs create a new one
 
-**Обновляй**, если:
-- Тот же intent, уточнённая реализация
-- Scope сужается (MVP сначала, остальное потом)
-- Кодовая база оказалась не такой, как ожидалось
+**Update** if:
+- Same intent, refined implementation
+- Scope is narrowing (MVP first, rest later)
+- Codebase turned out different than expected
 
-**Создавай новое**, если:
-- Intent принципиально изменился
-- Scope разросся до другой работы
-- Исходное изменение можно завершить самостоятельно
+**Create new** if:
+- Intent fundamentally changed
+- Scope grew into different work
+- The original change can be completed independently
 
-Быстрый тест: >50% overlap со старым → обновляй. <50% → новое изменение.
+Quick test: >50% overlap with old → update. <50% → new change.
 
-## Полезные ссылки
+## Useful links
 
 - [OpenSpec GitHub](https://github.com/Fission-AI/OpenSpec)
-- [OpenSpec документация](https://github.com/Fission-AI/OpenSpec/tree/main/docs)
+- [OpenSpec documentation](https://github.com/Fission-AI/OpenSpec/tree/main/docs)
 - [OpenSpec Discord](https://discord.gg/YctCnvvshC)
